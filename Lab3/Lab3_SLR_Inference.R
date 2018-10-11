@@ -3,52 +3,45 @@
 library(SDSRegressionR)
 library(tidyverse)
 
-intel <- read_csv("data/intelligence.csv")
+res <- read_csv("data/Resilience.csv")
 
-#Scale MRI to something OK....
-fivenum(intel$MRIcount)
-intel <- intel %>% 
-  mutate(mri_100 = MRIcount / 100000)
+#Subset the data
+basic <- res %>% 
+  filter(Group == "Basic Sciences")
 
-#Define variables that might be of interest
-vars <- c("PIQ", "mri_100", "Weight", "Height")
+-----------
 
-#New way to get basic descriptives:
+#Take an intial look at the variables 
 library(psych)
-describe(select(intel, one_of(vars)), IQR = TRUE)
-
-#Take an intial look at the variables (including PIQ and MRI)
-library(psych)
-corr.test(select(intel, one_of(vars)))$r
+corr.test(select(basic, MS.QoL,DREEM.A.SP),use="pairwise.complete.obs")$r
 
 #Check linearity
-simpleScatter(intel, mri_100, PIQ, line=TRUE)
+simpleScatter(basic, DREEM.A.SP,MS.QoL,line=TRUE)
 
 #Run the intial model
-iq <- lm(PIQ ~ mri_100, data=intel)
-summary(iq)
+mod <- lm(MS.QoL ~ DREEM.A.SP, data=basic)
+summary(mod)
 
 #Look for outliers
-threeOuts(iq, key.variable = "SubjectID")
-cooksPlot(iq, key.variable = "SubjectID", print.obs = TRUE)
+threeOuts(mod, key.variable = "IDR")
+cooksPlot(mod, key.variable = "IDR", print.obs = TRUE)
 
 #Remove the offending outlier
-intel_noout <- intel %>% 
-  filter(SubjectID %not in% c(23))
+basic_noout <- basic %>% 
+  filter(IDR %not in% c("IDR1058"))
 
 #Re-run the model
-iq2 <- lm(PIQ ~ mri_100, data=intel_noout)
-summary(iq2)
+mod2 <- lm(MS.QoL ~ DREEM.A.SP, data=basic_noout)
+summary(mod2)
+
 #Grab confidence intervals
-confint(iq2)
+confint(mod2)
 
-#Test the additional questions
-library(car)
-linearHypothesis(iq2, "mri_100 = 10.00")
-
-#Predict new MRI of 1,000,000
-nw_mri <- data.frame(mri_100 = 10)
-predict(iq2, nw_mri, interval="prediction")
+#additional questions
 
 library(car)
-linearHypothesis(iq2, "mri_100 = 10.00")
+
+nw_sp <- data.frame(DREEM.A.SP=10)
+predict(mod2, nw_sp, interval="prediction")
+
+linearHypothesis(mod2, "DREEM.A.SP=0.175")
