@@ -20,8 +20,8 @@ cooksCutOff * 3
 threeOuts(full, key.variable = "SubjectID")
 
 #Clean up
-good_int <- int %>% 
-  filter(SubjectID %not in% c("ID320", "ID198", "ID252", "ID316"))
+g_dent <- dent %>% 
+  filter(UniqueID %not in% c("SUB178", "SUB103", "SUB284"))
 
 #Re-run the final model
 fullg <- lm(Happiness ~ Age + ERA + QSR + Neuroticism + Extraversion, data=good_int)

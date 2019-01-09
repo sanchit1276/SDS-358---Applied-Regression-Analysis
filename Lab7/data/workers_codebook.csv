@@ -1,0 +1,1 @@
+Variable,DescriptionSubID,Unique IdentifierAge,Age of participantFemale,"Gender: 1= Female, 0 = Male"College.grad,Graduated from college (4 yr): 1 = Yes; 0 = NoHave.child,Children status: 1 = Yes; 0 = NoJob,Occupational categoryReligiosity,Scale scoreSocial.Support,Scale scoreLife.satisfaction,Scale scoreHappiness,Scale scoreStressors,Scale scoreDepression,Scale score

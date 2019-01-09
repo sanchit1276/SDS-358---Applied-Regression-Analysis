@@ -1,0 +1,1 @@
+Variable Name,Description,LoanID,Unique identifierloan_amnt,Amount requested of loanpurpose,Categorical grouping of loanfico,Fico Score of applicantdti,Debt to Income Ratio of applicantincome,Reported houshold income of the applicantloanIndicator,Calssifier of good (1) or poor (0) borrower performance
